@@ -2,15 +2,15 @@
 
 A step-by-step guide for integrating the FastSpring Checkout SDK into a plain HTML/JavaScript page — no build tools or frameworks required.
 
-## What you'll have at the end
+## What you will have at the end
 
-A working credit-card form on your page that accepts a real test order: the customer enters card details, clicks **Pay**, and FastSpring processes the payment end-to-end. By the end of this guide, you'll be able to take a session ID returned by your server and route the buyer through a fully styled, embedded checkout.
+A working credit-card form on your page that accepts a real test order: the customer enters card details, clicks **Pay**, and FastSpring processes the payment end-to-end. By the end of this guide, you will be able to take a session ID returned by your server and route the buyer through a fully styled, embedded checkout.
 
 ## Prerequisites
 
 - A FastSpring account with a **component checkout** configured in your store.
-- Your component checkout's **URL** — the path you'll pass to `FastSpring.init`. Find it in the FastSpring app under **Checkouts → Component Checkouts → [your checkout] → Implementation**.
-- A **server endpoint** that creates sessions via the FastSpring [Sessions API](https://developer.fastspring.com/reference/createsession) — you'll generate a session ID on each checkout attempt and pass it to the SDK.
+- Your component checkout's **URL** — the path you will pass to `FastSpring.init`. Find it in the FastSpring app under **Checkouts → Component Checkouts → [your checkout] → Implementation**.
+- A **server endpoint** that creates sessions via the FastSpring [Sessions API](https://developer.fastspring.com/reference/createsession) — you will generate a session ID on each checkout attempt and pass it to the SDK.
 - For local development: your local origin (e.g. `http://localhost:5173`) added to the **allow list** for your component checkout — see the callout in [Step 2](#step-2--initialize-the-sdk).
 
 ## Overview
@@ -61,7 +61,7 @@ Add the SDK script tag in your HTML, just before the closing `</head>` tag.
 
 ## Step 2 — Initialize the SDK
 
-Call `FastSpring.init()` once the SDK script has loaded. It returns an `sdk` instance you'll use in all subsequent steps.
+Call `FastSpring.init()` once the SDK script has loaded. It returns an `sdk` instance you will use in all subsequent steps.
 
 > **Local development — allow your origin first**
 >
@@ -79,7 +79,6 @@ Call `FastSpring.init()` once the SDK script has loaded. It returns an `sdk` ins
         checkoutUrl: 'https://<your-store>.onfastspring.com/<your-checkout>',
 
         // ── Optional ──────────────────────────────────────────────────────
-        env: 'qa2',       // Omit for production. Use 'qa2' for QA.
         debug: true,      // Shows built-in success/failure dialogs during testing.
 
         globalStyles: {   // Applied to all components as base defaults.
