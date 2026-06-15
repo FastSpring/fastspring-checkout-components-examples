@@ -2,9 +2,12 @@
 
 A step-by-step guide for integrating the FastSpring Checkout SDK into a plain HTML/JavaScript page — no build tools or frameworks required.
 
+> **New to Component Checkouts?** Before running these examples, you will need to create and configure a Component Checkout in the FastSpring app — set your allowed domains, currencies, and payment settings.
+> [Get started in the FastSpring docs →](https://developer.fastspring.com/docs/set-up-component-checkouts)
+
 ## What you will have at the end
 
-A working credit-card form on your page that accepts a real test order: the customer enters card details, clicks **Pay**, and FastSpring processes the payment end-to-end. By the end of this guide, you will be able to take a session ID returned by your server and route the buyer through a fully styled, embedded checkout.
+A working credit-card form on your page that accepts a live order: the customer enters card details, clicks **Pay**, and FastSpring processes the payment end-to-end. By the end of this guide, you will be able to take a session ID returned by your server and route the buyer through a fully styled, embedded checkout.
 
 ## Prerequisites
 
@@ -21,7 +24,7 @@ The integration has six steps:
 2. Initialize the SDK (`FastSpring.init`)
 3. Create and mount the **Card** component
 4. Create and mount the **Pay Button** component
-5. *(Optional)* Create and mount the **Disclosures** component
+5. Create and mount the **Disclosures** component
 6. Call `sdk.checkout(sessionId)` to start the checkout flow
 
 ---

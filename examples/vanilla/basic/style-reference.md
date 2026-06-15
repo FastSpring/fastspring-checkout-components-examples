@@ -100,7 +100,7 @@ Use `input` to style every card field at once. Use `cardNumber`, `expiry`, or `c
 | Property | Default | Description |
 | --- | --- | --- |
 | `backgroundColor` | `#ffffff` | Input background. Always applied as `background-color` (not the shorthand) to preserve card-brand badges. |
-| `borderColor` | `#DEE2E6` | Border color |
+| `borderColor` | `#E0E4EA` | Border color |
 | `borderRadius` | `6px` | Corner radius |
 | `color` | `#4B5563` | Text color |
 | `fontSize` | `16px` | Font size |
@@ -111,7 +111,6 @@ Use `input` to style every card field at once. Use `cardNumber`, `expiry`, or `c
 | `margin` | `0` | Outer margin |
 | `outline` | — | Focus-ring shorthand (e.g., `'1px solid #bfdbfe'`) |
 | `outlineColor` | `#bfdbfe` | Focus-ring color (flat alternative to `outline`) |
-| `errorBorderColor` | `#e53935` | Border color in error state |
 | `placeholderColor` | `#7D8A9B` | Placeholder text color (flat alternative to `'::placeholder'.color`) |
 | `'::placeholder'` | — | Nested placeholder styles — `color`, `fontSize`, `fontFamily`, `fontWeight` |
 
@@ -121,7 +120,7 @@ Use `input` to style every card field at once. Use `cardNumber`, `expiry`, or `c
 input: {
   '::placeholder': {
     color: '#94a3b8',
-    fontSize: '14px',
+        fontSize: '14px',
   },
 }
 ```
@@ -449,28 +448,28 @@ hover: {
 
 ```js
 state: {
-  default: {
+default: {
     card: {
       backgroundColor: '#1e293b',
-      borderColor: '#334155',
+          borderColor: '#334155',
     },
   },
   hover: {
     card: {
       backgroundColor: '#1e293b',
-      borderColor: '#334155',
+          borderColor: '#334155',
     },
   },
   focus: {
     card: {
       backgroundColor: '#1e293b',
-      borderColor: '#334155',
+          borderColor: '#334155',
     },
   },
   active: {
     card: {
       backgroundColor: '#1e293b',
-      borderColor: '#475569',
+          borderColor: '#475569',
     },
   },
 }
