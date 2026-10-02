@@ -18,14 +18,17 @@ A working credit-card form on your page that accepts a live order: the customer 
 
 ## Overview
 
-The integration has six steps:
+The integration has nine steps:
 
 1. Include the SDK
 2. Initialize the SDK (`FastSpring.init`)
 3. Create and mount the **Card** component
 4. Create and mount the **Pay Button** component
 5. Create and mount the **Disclosures** component
-6. Call `sdk.checkout(sessionId)` to start the checkout flow
+6. Create and mount the **Coupon** component
+7. Create and mount the **Email** component (email address)
+8. Create and mount the **Apple Pay** component
+9. Call `sdk.checkout(sessionId)` to start the checkout flow
 
 ---
 
@@ -245,7 +248,113 @@ The Privacy Policy and Terms of Sale links populate automatically when both URLs
 
 ---
 
-## Step 6 — Start the Checkout
+## Step 6 — Create and mount the Coupon component
+
+The Coupon component lets the buyer apply or remove a coupon code during checkout, inside its own iframe. Applying or clearing a code updates the session via the SDK; components that show session-derived values (such as totals) refresh automatically.
+
+**HTML — add a mount target:**
+
+```html
+<div id="coupon-element"></div>
+```
+
+**JS — create and mount:**
+
+```js
+const couponComponent = sdk.components.create('fs-coupon', {});
+
+couponComponent.mount('#coupon-element');
+```
+
+If the session already has a coupon applied, the component renders its applied state on load — the buyer can clear the existing code or replace it.
+
+---
+
+## Step 7 — Create and mount the Email component
+
+The Email component collects the buyer's **email address** (which maps to `customer.billToContact.email` in the session) inside a secure iframe. It renders no section header, so write your own heading above it on the page. It's typically shown at the top of the form, so mount its target above the card.
+
+**HTML — add a mount target:**
+
+```html
+<div id="email-element"></div>
+```
+
+**JS — create and mount:**
+
+```js
+const emailComponent = sdk.components.create('fs-email', {
+    labelMode: 'floating',      // 'floating' (default) | 'fixed'
+    fields: { email: 'auto' },  // 'auto' (default) | 'readonly' | 'never'
+
+    style: {
+        state: {
+            default: {
+                email: { maxWidth: '520px' },
+                input: { borderRadius: '6px', height: '48px' },
+            },
+            focus: {
+                input: { borderColor: '#4d90fe' },
+            },
+            error: {
+                input: { borderColor: '#EB1431' },
+            },
+        },
+    },
+});
+
+emailComponent.mount('#email-element');
+```
+
+`fields.email` controls visibility: `'auto'` shows an editable, required field (pre-filled if the session already has an email); `'readonly'` shows it pre-filled and locked; `'never'` hides it. `'readonly'`/`'never'` fall back to `'auto'` when the session has no email, since an order can't be fulfilled without one.
+
+For the full list of styling categories (`email`, `label`, `input`, `inlineError`) and per-state overrides, see the [Style Properties Reference](./style-reference.md).
+
+---
+
+## Step 8 — Create and mount the Apple Pay component
+
+The Apple Pay component renders Apple's official Apple Pay button inside a secure iframe (the two-step flow: clicking it opens a FastSpring-hosted window where the buyer confirms with Face ID / Touch ID).
+
+The button only appears when **both** hold — otherwise the component renders nothing and other payment methods take over (no error is shown):
+
+- the buyer's browser supports Apple Pay (Safari on macOS/iOS), and
+- Apple Pay is enabled as a payment method for your store.
+
+**HTML — add a mount target:**
+
+```html
+<div id="apple-pay-element"></div>
+```
+
+**JS — create and mount:**
+
+```js
+const applePayComponent = sdk.components.create('fs-apple-pay', {
+    variant: 'black',            // 'black' (default) | 'white' — use white on dark checkouts
+    frame: { width: '100%', maxWidth: '680px' },
+
+    style: {
+        state: {
+            default: {
+                button: { height: '48px', borderRadius: '4px' },
+            },
+        },
+    },
+});
+
+applePayComponent.mount('#apple-pay-element');
+```
+
+While the Apple Pay window is open, the SDK dims your page with a gray overlay to prevent double-checkout; it is removed automatically when the window closes, is abandoned, or the payment completes. Clicking the overlay closes the Apple Pay window and restores the checkout.
+
+A successful Apple Pay payment fires the same `onOrderCompleted` callback as a card payment; declines are reported through `onPaymentFailed`.
+
+The button is drawn by Apple, so the stylable surface is small: `variant`, `frame`, and `button.height` / `button.borderRadius`. See the [Style Properties Reference](./style-reference.md).
+
+---
+
+## Step 9 — Start the Checkout
 
 Call `sdk.checkout()` with a valid **Session ID** to load session data into the mounted components. The Card and Pay Button become visible once the session is confirmed open.
 
@@ -278,8 +387,17 @@ sdk.checkout('<SESSION_ID>', {
 </head>
 <body>
 
+    <!-- Email mount target -->
+    <div id="email-element"></div>
+
+    <!-- Apple Pay mount target -->
+    <div id="apple-pay-element"></div>
+
     <!-- Card mount target -->
     <div id="card-element"></div>
+
+    <!-- Coupon mount target -->
+    <div id="coupon-element"></div>
 
     <!-- Pay button mount target -->
     <div id="pay-button-element"></div>
@@ -296,9 +414,21 @@ sdk.checkout('<SESSION_ID>', {
             onPaymentFailed:  (error) => console.error('Payment failed:', error),
         });
 
+        // Email component (email)
+        const emailComponent = sdk.components.create('fs-email', {});
+        emailComponent.mount('#email-element');
+
+        // Apple Pay component (renders only in eligible browsers)
+        const applePayComponent = sdk.components.create('fs-apple-pay', {});
+        applePayComponent.mount('#apple-pay-element');
+
         // Card component
         const cardComponent = sdk.components.create('fs-card', {});
         cardComponent.mount('#card-element');
+
+        // Coupon component
+        const couponComponent = sdk.components.create('fs-coupon', {});
+        couponComponent.mount('#coupon-element');
 
         // Pay button component
         const payButtonComponent = sdk.components.create('fs-pay-button', {});
@@ -342,6 +472,6 @@ Verify the CDN URL and version. The current supported version is shown in Step 1
 
 ## Next steps
 
-- **Full styling reference** — [`style-reference.md`](./style-reference.md) lists every property, type, default, and state variant for all three components.
+- **Full styling reference** — [`style-reference.md`](./style-reference.md) lists every property, type, default, and state variant for every component.
 - **[Sessions API](https://developer.fastspring.com/reference/sessions-overview)** — covers session creation, customer details, item overrides, and pricing.
 - **Configure your checkout** — adjust allowed domains, currencies, and payment-method save behavior in the FastSpring app under **Checkouts → Component Checkouts → [your checkout]**.
