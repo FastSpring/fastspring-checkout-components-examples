@@ -1,6 +1,6 @@
 # Style Properties Reference
 
-Canonical reference for every styling property exposed by the FastSpring Checkout SDK components: `fs-card`, `fs-email`, `fs-apple-pay`, `fs-coupon`, `fs-pay-button`, and `fs-disclosures`.
+Canonical reference for every styling property exposed by the FastSpring Checkout SDK components: `fs-card`, `fs-email`, `fs-apple-pay`, `fs-google-pay`, `fs-coupon`, `fs-pay-button`, and `fs-disclosures`.
 
 For setup and integration, see the [Vanilla JS Integration Guide](https://github.com/FastSpring/fastspring-checkout-components-examples/blob/main/examples/vanilla/basic/README.md). This document is a lookup reference — code examples here are illustrative, not full integrations.
 
@@ -430,6 +430,59 @@ sdk.components.create('fs-apple-pay', {
     },
   },
 }).mount('#apple-pay-element');
+```
+
+---
+
+## Google Pay (`fs-google-pay`)
+
+Renders a Google Pay button. Clicking it opens a FastSpring-hosted window where the buyer completes the Google Pay flow. The button appears only when Google Pay is available for the session and browser — otherwise the component renders nothing and takes no space.
+
+Google's brand guidelines require the button to match the official Google Pay button, so its colors, label font, padding, and interaction states are fixed. The stylable surface is the `variant` option, the `frame` option, and two `button` properties. This component takes nothing from `globalStyles`.
+
+### Component options
+
+Top-level options passed alongside `style`:
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `variant` | `'black'` \| `'white'` | `'black'` | Google button appearance. `'black'` suits light checkouts; `'white'` (white background with a dark label and border) suits dark ones. |
+| `frame` | `{ width?, maxWidth? }` | see below | The component's own box: width and cap. A layout option, so it lives beside `style`, not inside it. |
+
+### `frame` — the component's size
+
+| Property | Default | Description |
+| --- | --- | --- |
+| `width` | `100%` | Component width. Fills the container you mount it into. |
+| `maxWidth` | `680px` | Caps the component width on wide screens. Every component uses the same value. `'none'` removes the cap. |
+
+### `button` — the Google Pay button
+
+Width comes from `frame`; the button always fills it.
+
+| Property | Default | Description |
+| --- | --- | --- |
+| `height` | `48px` | Button height |
+| `borderRadius` | `4px` | Corner radius |
+
+### Google Pay states
+
+Only the `default` state is wired. Hover, focus, and disabled styling are fixed by Google's brand rules; overrides under other state keys are ignored.
+
+### Example — full Google Pay customization
+
+```js
+sdk.components.create('fs-google-pay', {
+  variant: 'white',
+  frame: { width: '100%', maxWidth: '480px' },
+  style: {
+    state: {
+      default: {
+        button: { height: '56px', borderRadius: '10px' },
+      },
+    },
+  },
+}).mount('#google-pay-element');
 ```
 
 ---
